@@ -1,0 +1,272 @@
+.quest-detail {
+  min-height: 100vh;
+  background: #f0f4ff;
+}
+
+.detail-header {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  padding: 3rem 1.25rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 50%, var(--quest-color, #6366f1) 0%, transparent 60%);
+  opacity: 0.25;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.12);
+  border: none;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.detail-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-icon {
+  font-size: 5rem;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+  animation: heroFloat 3s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-badge {
+  color: white;
+  font-family: 'Righteous', cursive;
+  font-size: 0.85rem;
+  padding: 0.35rem 1rem;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+}
+
+.detail-body {
+  padding: 1.25rem;
+}
+
+.detail-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  margin-bottom: 1.25rem;
+}
+
+.detail-title {
+  font-family: 'Righteous', cursive;
+  font-size: 1.5rem;
+  color: #1a1a2e;
+  margin: 0 0 0.5rem;
+}
+
+.detail-location {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Nunito', sans-serif;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.location-icon {
+  font-size: 1rem;
+}
+
+.detail-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 1.25rem 0;
+}
+
+.detail-description {
+  font-family: 'Nunito', sans-serif;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.rewards-heading {
+  font-family: 'Righteous', cursive;
+  font-size: 1rem;
+  color: #1a1a2e;
+  margin: 0 0 0.75rem;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.reward-item {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reward-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.reward-value {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+}
+
+.reward-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.instructions {}
+
+.instructions-title {
+  font-family: 'Righteous', cursive;
+  font-size: 1rem;
+  color: #1a1a2e;
+  margin: 0 0 0.75rem;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.step-num {
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Righteous', cursive;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.step p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: #475569;
+  margin: 0;
+  padding-top: 2px;
+  line-height: 1.5;
+}
+
+.step p strong {
+  color: #1a1a2e;
+}
+
+.completed-banner {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  text-align: center;
+  padding: 1.1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.scan-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Righteous', cursive;
+  font-size: 1.15rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(26, 26, 46, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--quest-color, #6366f1), transparent);
+  opacity: 0.4;
+}
+
+.scan-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(26, 26, 46, 0.5);
+}
+
+.scan-btn:active {
+  transform: translateY(0);
+}
+
+.scan-btn-icon {
+  font-size: 1.4rem;
+  position: relative;
+}
+
+.scan-btn span:last-child {
+  position: relative;
+}
