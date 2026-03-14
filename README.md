@@ -2,6 +2,10 @@
 
 A gamified campus exploration app built for a 24-hour hackathon demo.
 
+## Live Demo
+
+👉 [https://2026-unihack.vercel.app](https://2026-unihack.vercel.app)
+
 ## Quick Start
 
 ```bash
@@ -20,18 +24,19 @@ npm run dev
 
 ## QR Code Values
 
-| Location | QR Value |
-|---|---|
-| Baillieu Library | `quest_baillieu` |
-| Arts West | `quest_artswest` |
-| Old Quadrangle | `quest_oldquad` |
-| Student Pavilion | `quest_pavilion` |
-| South Lawn | `quest_southlawn` |
-| MSD Building | `quest_msd` |
+| Location         | QR Value          |
+| ---------------- | ----------------- |
+| Baillieu Library | `quest_baillieu`  |
+| Arts West        | `quest_artswest`  |
+| Old Quadrangle   | `quest_oldquad`   |
+| Student Pavilion | `quest_pavilion`  |
+| South Lawn       | `quest_southlawn` |
+| MSD Building     | `quest_msd`       |
 
 Generate printable QR codes at https://qrcode-monkey.com
 
 ## Tech Stack
+
 - React + Vite
 - html5-qrcode
 - localStorage
