@@ -1,8 +1,76 @@
+"""
+UniMelb Location Matcher API
+
+This module implements a FastAPI backend service that uses Google Gemini
+to identify or verify locations within the University of Melbourne campus
+based on uploaded images.
+
+Main Features
+-------------
+1. Image location verification
+   - Given an image and a place name, determine whether the image matches
+     the specified University of Melbourne location.
+
+2. Image location identification
+   - Given only an image, identify the most likely location on campus
+     from a predefined candidate list.
+
+3. Image preprocessing
+   - Automatically correct orientation
+   - Resize large images
+   - Convert to JPEG format
+
+4. Gemini integration
+   - Sends image + prompt to Gemini model
+   - Parses structured JSON response
+
+API Endpoints
+-------------
+GET  /
+    Health check endpoint.
+
+POST /match-location
+    Upload an image and optionally a place name to verify or identify
+    a campus location.
+
+"""
+"""
+Response JSON format
+
+Verify Mode
+-----------
+{
+  "mode": "verify",
+  "input_place_name": "Baillieu Library",
+  "matched": true,
+  "confidence": 0.86,
+  "identified_place": "Baillieu Library",
+  "reason": "...",
+  "humorous_intro": "",
+  "image_meta": {...},
+  "status": "Match successful"
+}
+
+Identify Mode
+-------------
+{
+  "mode": "identify",
+  "input_place_name": "",
+  "matched": null,
+  "confidence": 0.72,
+  "identified_place": "Union House",
+  "reason": "...",
+  "humorous_intro": "...",
+  "image_meta": {...},
+  "status": "Identified"
+}
+"""
+
 import io
 import json
 import os
 import re
-from typing import Optional, Tuple
+from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -23,6 +91,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# The .env file is not provided
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview").strip()
 
@@ -48,13 +117,11 @@ UNIMELB_PLACES = [
 "Babel Building",
 "Elisabeth Murdoch Building",
 "John Medley Building",
-"Old Arts Building",
 
 # Libraries
 "Eastern Resource Centre Library",
 "Giblin Eunson Library",
 "Law Library",
-"Baillieu Library"
 
 # Science precinct
 "Chemistry Building",
@@ -106,15 +173,45 @@ UNIMELB_PLACES = [
 
 ]
 
-
-def clamp_int(value: int, lo: int, hi: int) -> int:
-    return max(lo, min(value, hi))
-
 def preprocess_image(
     image_bytes: bytes,
     max_side: int = 1280,
     jpeg_quality: int = 85,
 ):
+    """
+    Preprocess an uploaded image before sending it to the Gemini model.
+
+    Steps
+    -----
+    1. Open image from raw bytes
+    2. Fix EXIF orientation
+    3. Convert to RGB format
+    4. Resize if the longest side exceeds `max_side`
+    5. Compress to JPEG format
+
+    Parameters
+    ----------
+    image_bytes : bytes
+        Raw image data uploaded by the client.
+
+    max_side : int
+        Maximum allowed size of the longest side of the image.
+
+    jpeg_quality : int
+        JPEG compression quality.
+
+    Returns
+    -------
+    Tuple[bytes, str, dict]
+        processed_bytes : bytes
+            Processed JPEG image data.
+
+        mime_type : str
+            MIME type of the processed image.
+
+        meta : dict
+            Metadata about original and processed image size.
+    """
     try:
         img = Image.open(io.BytesIO(image_bytes))
     except Exception as e:
@@ -146,7 +243,31 @@ def preprocess_image(
 
 def extract_json(text: str) -> dict:
     """
-    Try to extract JSON from the model output
+    Extract a JSON object from the Gemini model output.
+
+    The model is instructed to return pure JSON, but sometimes
+    it may include additional text or Markdown formatting.
+
+    This function attempts multiple strategies to recover JSON:
+
+    1. Direct JSON parsing
+    2. Extract JSON from ```json fenced blocks
+    3. Extract the first {...} structure
+
+    Parameters
+    ----------
+    text : str
+        Raw text output from the Gemini model.
+
+    Returns
+    -------
+    dict
+        Parsed JSON object.
+
+    Raises
+    ------
+    ValueError
+        If no valid JSON structure can be extracted.
     """
     text = text.strip()
 
@@ -176,7 +297,30 @@ def extract_json(text: str) -> dict:
 
 
 def build_prompt(place_name: Optional[str]) -> str:
-    candidate_text = "、".join(UNIMELB_PLACES) if UNIMELB_PLACES else "(No candidate list was provided)"
+    """
+    Build the prompt sent to the Gemini model.
+
+    Two modes are supported:
+
+    1. Verify Mode
+       If a place name is provided, the model determines whether
+       the uploaded image matches the specified location.
+
+    2. Identify Mode
+       If no place name is provided, the model identifies the most
+       likely campus location shown in the image.
+
+    Parameters
+    ----------
+    place_name : Optional[str]
+        User-provided location name.
+
+    Returns
+    -------
+    str
+        Prompt text sent to Gemini.
+    """
+    candidate_text = ", ".join(UNIMELB_PLACES) if UNIMELB_PLACES else "(No candidate list was provided)"
 
     if place_name and place_name.strip():
         return f"""
@@ -263,6 +407,50 @@ async def match_location(
     image: UploadFile = File(...),
     place_name: Optional[str] = Form(default=""),
 ):
+    """
+    Match or identify a University of Melbourne campus location
+    based on an uploaded image.
+
+    Parameters
+    ----------
+    image : UploadFile
+        Image uploaded by the user.
+
+    place_name : str (optional)
+        If provided, the API verifies whether the image matches
+        this specific location.
+
+        If empty, the API attempts to identify the location.
+
+    Returns
+    -------
+    dict
+        JSON response containing:
+
+        mode
+            "verify" or "identify"
+
+        matched
+            True/False when verifying a location
+
+        identified_place
+            Best guess of the location from candidate list
+
+        confidence
+            Confidence score (0–1)
+
+        reason
+            Explanation of the model decision
+
+        humorous_intro
+            A humorous sentence describing the place (identify mode)
+
+        image_meta
+            Metadata of the processed image
+
+        status
+            Human-readable status for frontend display
+    """
     # Basic verification
     if not image.content_type or not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
@@ -271,7 +459,7 @@ async def match_location(
     if not raw_bytes:
         raise HTTPException(status_code=400, detail="Empty image file.")
 
-    # Preprocessing: Center cropping + scaling + JPEG compression
+    # Preprocessing: scaling + JPEG compression
     processed_bytes, processed_mime, image_meta = preprocess_image(
         raw_bytes,
         max_side=1280,
@@ -328,6 +516,6 @@ async def match_location(
     if place_name.strip():
         result["status"] = "Match successful" if bool(result["matched"]) else "Mismatch"
     else:
-        result["status"] = "Match successful" if result["identified_place"] != "unknown" else "Can not verify"
+        result["status"] = "Identified" if result["identified_place"] != "unknown" else "Can not verify"
 
     return result
