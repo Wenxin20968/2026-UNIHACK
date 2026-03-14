@@ -1,6 +1,10 @@
 # 🗺️ CampusQuest
 
-A gamified campus exploration app built for a 24-hour hackathon demo.
+A gamified campus exploration app demo
+
+## Description
+
+CampusQuest is a gamified campus exploration app where users complete quests by visiting real university locations and scanning QR codes. Each completed quest rewards XP and unlocks a piece of a campus puzzle, turning campus discovery into an interactive game.
 
 ## Live Demo
 
@@ -18,7 +22,7 @@ npm run dev
 1. Open app → see Home page with XP, level, quest list
 2. Tap a quest card → Quest Detail page
 3. Tap **"Scan to Unlock"** → QR scanner opens
-4. For demo: tap **"Enter code manually"** → click a code chip or type one
+4. For testing: tap **"Enter code manually"** → click a code chip or type one
 5. Watch the animated Reward Popup appear!
 6. Puzzle pieces fill in on the home screen
 
