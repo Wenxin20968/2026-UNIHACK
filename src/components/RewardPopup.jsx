@@ -22,7 +22,7 @@ export default function RewardPopup({ quest, onClose }) {
         <div className="popup-burst">✨</div>
         <div className="popup-icon">{quest.icon}</div>
         <h2 className="popup-title">Quest Complete!</h2>
-        <p className="popup-quest-name">{quest.title}</p>
+        <p className="popup-quest-name">{quest.tip}</p>
 
         <div className="popup-rewards">
           <div className="reward-badge xp-badge">

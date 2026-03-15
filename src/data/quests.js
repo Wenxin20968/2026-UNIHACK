@@ -9,6 +9,7 @@ export const quests = [
     puzzlePieceIndex: 0,
     icon: "📚",
     difficulty: "Easy",
+    tip: "Take the circular staircase up to the second floor to see the exhibition",
     color: "#6366f1",
   },
   {
@@ -21,6 +22,7 @@ export const quests = [
     puzzlePieceIndex: 1,
     icon: "🎨",
     difficulty: "Easy",
+    tip: "Sometimes you can hear the piano! Try to find it if you like :D",
     color: "#ec4899",
   },
   {
@@ -33,6 +35,7 @@ export const quests = [
     puzzlePieceIndex: 2,
     icon: "🏰",
     difficulty: "Medium",
+    tip: "Beautiful Camellia trees! You might want to take a picture here :)",
     color: "#f59e0b",
   },
   {
@@ -45,6 +48,7 @@ export const quests = [
     puzzlePieceIndex: 3,
     icon: "🎓",
     difficulty: "Easy",
+    tip: "There is a Library that you can not study!",
     color: "#10b981",
   },
   {
@@ -57,6 +61,7 @@ export const quests = [
     puzzlePieceIndex: 4,
     icon: "🌳",
     difficulty: "Easy",
+    tip: "Put the phone down and enjoy the nature!",
     color: "#22c55e",
   },
   {
@@ -69,6 +74,7 @@ export const quests = [
     puzzlePieceIndex: 5,
     icon: "📐",
     difficulty: "Medium",
+    tip:"Gallery is open! You can find some interesting design works there.",
     color: "#8b5cf6",
   },
 ];
